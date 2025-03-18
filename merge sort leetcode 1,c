@@ -1,0 +1,54 @@
+void heapSort(char **names, int *heights, int size);
+
+char** sortPeople(char** names, int namesSize, int* heights, int heightsSize, int* returnSize) {
+    heapSort(names, heights, namesSize);
+    *returnSize = namesSize;
+    return names;
+}
+
+void bubbleDown(char **names, int *heights, int size, int parent) {
+    int child, t;
+    char *s;
+    do {
+        child = 2 * parent + 1;
+        if (child >= size) {
+            return;
+        }
+        if (child < size-1 && heights[child] > heights[child+1]) {
+            ++child;
+        }
+        if (heights[parent] <= heights[child]) {
+            return;
+        }
+        t = heights[parent];
+        heights[parent] = heights[child];
+        heights[child] = t;
+        s = names[parent];
+        names[parent] = names[child];
+        names[child] = s;
+        parent = child;
+    } while(1);
+}
+
+void heapify(char **names, int *heights, int size) {
+    int i;
+    for (i = size/2; i >= 0; --i) {
+        bubbleDown(names, heights, size, i);
+    }
+}
+
+void heapSort(char **names, int *heights, int size) {
+    int t;
+    char *s;
+    heapify(names, heights, size);
+    while (size > 1) {
+        --size;
+        t = heights[0];
+        heights[0] = heights[size];
+        heights[size] = t;
+        s = names[0];
+        names[0] = names[size];
+        names[size] = s;
+        bubbleDown(names, heights, size, 0);
+    }
+}
